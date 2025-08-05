@@ -1,0 +1,22 @@
+{
+  "name": "pancakes-analytics",
+  "version": "1.0.0",
+  "description": "Retail Analytics Application for 99 Pancakes Store Chain",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "backend:dev": "cd backend && npm run dev",
+    "frontend:dev": "cd frontend && npm start",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "db:setup": "cd backend && npm run db:migrate",
+    "test": "cd backend && npm test && cd ../frontend && npm test"
+  },
+  "keywords": ["retail", "analytics", "pancakes", "dashboard"],
+  "author": "99 Pancakes Team",
+  "license": "PRIVATE",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
