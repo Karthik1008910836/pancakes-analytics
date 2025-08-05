@@ -3,8 +3,8 @@ services:
   - type: web
     name: pancakes-backend
     runtime: node
-    buildCommand: cd backend && npm ci
-    startCommand: cd backend && npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
     healthCheckPath: /api/health
     plan: free
     envVars:
@@ -25,7 +25,7 @@ services:
   - type: web
     name: pancakes-frontend
     runtime: static
-    buildCommand: cd frontend && npm ci && npm run build
+    buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
     plan: free
     routes:
