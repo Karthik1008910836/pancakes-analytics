@@ -87,14 +87,13 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully');
     
-    if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync({ force: true }); // Reset database for demo
-      console.log('✅ Database synchronized');
-      
-      // Seed demo data
-      const seedDemoData = require('./seed-demo-data');
-      await seedDemoData();
-    }
+    // Sync database tables (create if not exist)
+    await sequelize.sync({ alter: true });
+    console.log('✅ Database synchronized');
+    
+    // Seed demo data only if tables are empty
+    const seedDemoData = require('./seed-demo-data');
+    await seedDemoData();
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
