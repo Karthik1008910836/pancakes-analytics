@@ -123,17 +123,6 @@ const Login: React.FC = () => {
                 </Button>
               </Box>
 
-              <Box sx={{ mt: 3, p: 2, backgroundColor: 'grey.50', borderRadius: 1 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <strong>Login Credentials:</strong>
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Admin: admin / admin123
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Staff: kompallyuser / password
-                </Typography>
-              </Box>
             </CardContent>
           </Card>
         </Paper>
