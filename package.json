@@ -2,7 +2,7 @@
   "name": "pancakes-analytics",
   "version": "1.0.0",
   "description": "Retail Analytics Application for 99 Pancakes Store Chain",
-  "main": "index.js",
+  "main": "backend/server.js",
   "scripts": {
     "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
     "backend:dev": "cd backend && npm run dev",
