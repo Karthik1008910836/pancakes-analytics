@@ -434,8 +434,8 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
           {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
           <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
+              <Grid item xs={12} sm={6}>
                 <DatePicker
                   label="Date"
                   value={new Date(formData.date)}
@@ -445,24 +445,26 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      required: true
+                      required: true,
+                      size: 'medium'
                     }
                   }}
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Outlet"
                   value="99 Pancakes Kompally"
                   InputProps={{ readOnly: true }}
+                  size="medium"
                   required
                   helperText="Your outlet location (automatically selected)"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="MTD Target (₹)"
@@ -473,12 +475,13 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('mtd_target')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Month-to-date sales target"
+                  size="medium"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Daily Target (₹)"
@@ -489,12 +492,13 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('daily_target')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Today's sales target"
+                  size="medium"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Gross Sale (₹)"
@@ -505,12 +509,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('gross_sale')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Total sales before deductions"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Net Sale (₹)"
@@ -521,12 +525,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('net_sale')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Final sales after deductions"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Total Tickets"
@@ -537,12 +541,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('total_tickets')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Number of orders (online + offline)"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Offline Net Sale (₹)"
@@ -553,12 +557,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('offline_net_sale')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Cash/card sales at store"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Offline Tickets"
@@ -569,12 +573,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('offline_tickets')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Number of offline orders"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Cakes Sold"
@@ -585,12 +589,12 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('cakes_sold')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Number of cakes sold"
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Pastries Sold"
@@ -601,7 +605,7 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   onBlur={handleInputBlur('pastries_sold')}
                   InputProps={{ readOnly: isReadOnly }}
                   required
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 0, inputMode: 'numeric' }}
                   helperText="Number of pastries sold"
                 />
               </Grid>
@@ -649,9 +653,15 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
               </Grid>
 
               <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: { xs: 1, sm: 2 }, 
+                  justifyContent: 'space-between', 
+                  alignItems: { xs: 'stretch', sm: 'center' },
+                  flexDirection: { xs: 'column', sm: 'row' }
+                }}>
                   {/* Form Actions Left Side */}
-                  <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, flexWrap: 'wrap' }}>
                     {formMode === 'edit' && (
                       <Button
                         variant="outlined"
@@ -688,7 +698,7 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                   </Box>
 
                   {/* Submit Button Right Side */}
-                  <Box>
+                  <Box sx={{ width: { xs: '100%', sm: 'auto' } }}>
                     {!isReadOnly && (
                       <Button
                         type="submit"
@@ -696,6 +706,7 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                         disabled={loading}
                         startIcon={loading && <CircularProgress size={20} />}
                         size="large"
+                        fullWidth
                         color={
                           formMode === 'create' 
                             ? 'success' 
@@ -703,6 +714,10 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                               ? 'warning' 
                               : 'primary'
                         }
+                        sx={{ 
+                          minHeight: { xs: 48, sm: 'auto' },
+                          fontSize: { xs: '1rem', sm: '0.875rem' }
+                        }}
                       >
                         {loading ? 'Saving...' : 
                          formMode === 'create' 

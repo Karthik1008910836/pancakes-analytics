@@ -11,6 +11,9 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  IconButton,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Logout,
@@ -20,6 +23,7 @@ import {
   EditNote,
   Add as AddIcon,
   Receipt as ReceiptIcon,
+  Menu as MenuIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -31,6 +35,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -51,52 +57,68 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography 
-            variant="h6" 
+            variant={isMobile ? "h6" : "h5"} 
             component="div" 
             sx={{ 
               flexGrow: 1, 
               cursor: 'pointer',
-              '&:hover': { opacity: 0.8 }
+              '&:hover': { opacity: 0.8 },
+              fontSize: isMobile ? '1rem' : '1.25rem'
             }}
             onClick={() => navigate('/')}
           >
-            🥞 Kompally - 99 Pancakes
+            🥞 {isMobile ? 'Kompally' : 'Kompally - 99 Pancakes'}
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {/* Daily Sales Entry Button - Prominent for both admin and normal users */}
-            <Button
-              color="secondary"
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => navigate('/daily-sales-entry')}
-              sx={{ 
-                mr: 2,
-                fontWeight: 'bold',
-                boxShadow: 2,
-                '&:hover': {
-                  boxShadow: 4,
-                  transform: 'translateY(-1px)'
-                }
-              }}
-            >
-              Daily Sales Entry
-            </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+            {!isMobile && (
+              <Button
+                color="secondary"
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => navigate('/daily-sales-entry')}
+                sx={{ 
+                  mr: 2,
+                  fontWeight: 'bold',
+                  boxShadow: 2,
+                  '&:hover': {
+                    boxShadow: 4,
+                    transform: 'translateY(-1px)'
+                  }
+                }}
+              >
+                Daily Sales Entry
+              </Button>
+            )}
 
-            <Typography variant="body1">
-              {user?.first_name} {user?.last_name}
-            </Typography>
-            <Typography variant="body2" color="inherit" sx={{ opacity: 0.8 }}>
-              ({user?.role})
-            </Typography>
+            {!isMobile && (
+              <>
+                <Typography variant="body1">
+                  {user?.first_name} {user?.last_name}
+                </Typography>
+                <Typography variant="body2" color="inherit" sx={{ opacity: 0.8 }}>
+                  ({user?.role})
+                </Typography>
+              </>
+            )}
             
-            <Button
-              color="inherit"
-              onClick={handleMenuOpen}
-              startIcon={<Avatar sx={{ width: 32, height: 32 }}>{user?.first_name?.charAt(0)}</Avatar>}
-            >
-              Profile
-            </Button>
+            {isMobile ? (
+              <IconButton
+                color="inherit"
+                onClick={handleMenuOpen}
+                sx={{ p: 1 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              <Button
+                color="inherit"
+                onClick={handleMenuOpen}
+                startIcon={<Avatar sx={{ width: 32, height: 32 }}>{user?.first_name?.charAt(0)}</Avatar>}
+              >
+                Profile
+              </Button>
+            )}
           </Box>
 
           <Menu
@@ -111,7 +133,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               vertical: 'top',
               horizontal: 'right',
             }}
+            PaperProps={{
+              sx: {
+                minWidth: isMobile ? 200 : 250,
+                maxWidth: isMobile ? 250 : 300,
+              }
+            }}
           >
+            {isMobile && (
+              <MenuItem disabled sx={{ opacity: 0.7 }}>
+                <ListItemIcon>
+                  <Avatar sx={{ width: 24, height: 24, fontSize: '0.875rem' }}>
+                    {user?.first_name?.charAt(0)}
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {user?.first_name} {user?.last_name}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {user?.role}
+                  </Typography>
+                </ListItemText>
+              </MenuItem>
+            )}
             <MenuItem onClick={() => { navigate('/daily-sales-entry'); handleMenuClose(); }}>
               <ListItemIcon>
                 <ReceiptIcon fontSize="small" />
@@ -168,7 +213,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container 
+        maxWidth="lg" 
+        sx={{ 
+          mt: isMobile ? 2 : 4, 
+          mb: isMobile ? 2 : 4,
+          px: isMobile ? 1 : 3
+        }}
+      >
         {children}
       </Container>
     </Box>

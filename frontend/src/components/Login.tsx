@@ -48,26 +48,34 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ px: 2 }}>
       <Box
         sx={{
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          py: 2,
         }}
       >
-        <Paper elevation={3} sx={{ width: '100%', maxWidth: 400 }}>
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            width: '100%', 
+            maxWidth: 400,
+            mx: 2,
+          }}
+        >
           <Card>
-            <CardContent sx={{ p: 4 }}>
-              <Box sx={{ textAlign: 'center', mb: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                  99 Pancakes
+            <CardContent sx={{ p: { xs: 2, sm: 4 } }}>
+              <Box sx={{ textAlign: 'center', mb: 3 }}>
+                <Typography variant="h4" component="h1" gutterBottom sx={{ fontSize: { xs: '1.75rem', sm: '2.125rem' } }}>
+                  🥞 99 Pancakes
                 </Typography>
-                <Typography variant="h5" color="primary.main" gutterBottom>
+                <Typography variant="h5" color="primary.main" gutterBottom sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
                   Kompally Outlet
                 </Typography>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant="h6" color="text.secondary" sx={{ fontSize: { xs: '1rem', sm: '1.125rem' } }}>
                   Sales Analytics Dashboard
                 </Typography>
               </Box>
