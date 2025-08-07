@@ -57,7 +57,7 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
 
   const [originalData, setOriginalData] = useState<SalesFormData | null>(null);
 
-  const checkExistingEntry = async (date: string) => {
+  const checkExistingEntry = async (date: string, showExistingData: boolean = false) => {
     try {
       const response = await salesApi.checkExistingEntry({
         date,
@@ -66,10 +66,16 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
 
       if (response.success && response.data) {
         if (response.data.exists && response.data.entry) {
-          // Entry exists - pre-populate form
+          // Entry exists
           setExistingEntry(response.data);
-          setIsEditingExisting(true);
-          setFormMode(isAdmin ? 'edit' : 'view');
+          
+          // For current date, keep form empty unless user explicitly wants to see existing data
+          const isToday = date === format(new Date(), 'yyyy-MM-dd');
+          
+          if (showExistingData || !isToday) {
+            // Show existing data
+            setIsEditingExisting(true);
+            setFormMode(isAdmin ? 'edit' : 'view');
           
           const entryData = {
             date,
@@ -85,8 +91,27 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
             pastries_sold: response.data.entry.pastries_sold,
           };
           
-          setFormData(entryData);
-          setOriginalData(entryData);
+            setFormData(entryData);
+            setOriginalData(entryData);
+          } else {
+            // Keep form empty for current date entry
+            setIsEditingExisting(false);
+            setFormMode('create');
+            setOriginalData(null);
+            setFormData({
+              date,
+              outlet_id: 1,
+              mtd_target: 0,
+              daily_target: 0,
+              gross_sale: 0,
+              net_sale: 0,
+              total_tickets: 0,
+              offline_net_sale: 0,
+              offline_tickets: 0,
+              cakes_sold: 0,
+              pastries_sold: 0,
+            });
+          }
         } else {
           // No entry exists - show empty form
           setExistingEntry(null);
@@ -355,25 +380,45 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
 
           {/* Existing Entry Status */}
           {existingEntry && existingEntry.exists ? (
-            <Alert 
-              severity={existingEntry.hasPendingEditRequest ? "warning" : "info"} 
-              sx={{ mb: 2 }}
-              icon={<span>📋</span>}
-            >
-              {existingEntry.hasPendingEditRequest ? (
-                <>
-                  <strong>Entry Found with Pending Edit Request</strong><br />
-                  Sales data for this date exists with a pending modification request.
-                  {isAdmin ? " You can approve/reject it in the Admin Dashboard." : " Please wait for admin approval."}
-                </>
-              ) : (
-                <>
-                  <strong>Entry Found - Pre-filled with Existing Data</strong><br />
-                  Sales data for this date already exists and has been loaded into the form.
-                  {isAdmin ? " You can modify it directly." : " You can request edits from an admin."}
-                </>
-              )}
-            </Alert>
+            formMode === 'create' && formData.date === format(new Date(), 'yyyy-MM-dd') ? (
+              <Alert 
+                severity="info" 
+                sx={{ mb: 2 }}
+                icon={<span>📋</span>}
+                action={
+                  <Button
+                    color="inherit"
+                    size="small"
+                    onClick={() => checkExistingEntry(formData.date, true)}
+                  >
+                    View Existing Entry
+                  </Button>
+                }
+              >
+                <strong>Entry Already Exists for Today</strong><br />
+                Sales data for today has been entered. Click "View Existing Entry" to see it, or continue entering new data.
+              </Alert>
+            ) : (
+              <Alert 
+                severity={existingEntry.hasPendingEditRequest ? "warning" : "info"} 
+                sx={{ mb: 2 }}
+                icon={<span>📋</span>}
+              >
+                {existingEntry.hasPendingEditRequest ? (
+                  <>
+                    <strong>Entry Found with Pending Edit Request</strong><br />
+                    Sales data for this date exists with a pending modification request.
+                    {isAdmin ? " You can approve/reject it in the Admin Dashboard." : " Please wait for admin approval."}
+                  </>
+                ) : (
+                  <>
+                    <strong>Entry Found - Pre-filled with Existing Data</strong><br />
+                    Sales data for this date already exists and has been loaded into the form.
+                    {isAdmin ? " You can modify it directly." : " You can request edits from an admin."}
+                  </>
+                )}
+              </Alert>
+            )
           ) : (
             <Alert 
               severity="success" 
@@ -611,7 +656,7 @@ const EnhancedSalesForm: React.FC<EnhancedSalesFormProps> = ({ onSuccess }) => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() => checkExistingEntry(formData.date)}
+                        onClick={() => checkExistingEntry(formData.date, true)}
                         disabled={loading}
                       >
                         🔄 Reset to Original
