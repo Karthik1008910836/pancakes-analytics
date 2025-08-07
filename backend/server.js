@@ -51,7 +51,10 @@ app.use('/api/edit-requests', editRequestRoutes);
 
 // Serve static files from React build
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  const buildPath = path.join(__dirname, '../frontend/build');
+  console.log('Serving static files from:', buildPath);
+  
+  app.use(express.static(buildPath));
   
   // Catch all handler for React Router
   app.get('*', (req, res) => {
@@ -62,7 +65,10 @@ if (process.env.NODE_ENV === 'production') {
         message: 'API endpoint not found'
       });
     }
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+    
+    const indexPath = path.join(buildPath, 'index.html');
+    console.log('Serving index.html from:', indexPath);
+    res.sendFile(indexPath);
   });
 } else {
   // Development fallback for non-API routes
