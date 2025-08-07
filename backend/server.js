@@ -35,6 +35,14 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/sales', salesRoutes);
+app.use('/api/outlets', outletsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/edit-requests', editRequestRoutes);
+
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -43,46 +51,19 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/sales', salesRoutes);
-app.use('/api/outlets', outletsRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/edit-requests', editRequestRoutes);
-
-// Serve static files from React build
+// Serve static files and handle client-side routing
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../frontend/build');
   console.log('Serving static files from:', buildPath);
   
+  // Serve static files
   app.use(express.static(buildPath));
   
-  // Catch all handler for React Router
+  // Handle React Router - catch all remaining GET requests
   app.get('*', (req, res) => {
-    // Don't serve index.html for API routes
-    if (req.path.startsWith('/api/')) {
-      return res.status(404).json({
-        success: false,
-        message: 'API endpoint not found'
-      });
-    }
-    
     const indexPath = path.join(buildPath, 'index.html');
-    console.log('Serving index.html from:', indexPath);
+    console.log('Serving index.html for route:', req.path);
     res.sendFile(indexPath);
-  });
-} else {
-  // Development fallback for non-API routes
-  app.use('*', (req, res) => {
-    if (req.path.startsWith('/api/')) {
-      return res.status(404).json({
-        success: false,
-        message: 'API endpoint not found'
-      });
-    }
-    res.status(404).json({
-      success: false,
-      message: 'Frontend not built. Run in development mode or build the frontend first.'
-    });
   });
 }
 
