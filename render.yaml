@@ -5,7 +5,7 @@ services:
     runtime: node
     buildCommand: cd backend && npm install
     startCommand: cd backend && node server.js
-    healthCheckPath: /api/health
+    healthCheckPath: /health
     plan: free
     envVars:
       - key: NODE_ENV
@@ -34,7 +34,7 @@ services:
         destination: /index.html
     envVars:
       - key: REACT_APP_API_URL
-        value: https://pancakes-backend.onrender.com
+        value: https://pancakes-backend.onrender.com/api
 
 # PostgreSQL Database
 databases:
