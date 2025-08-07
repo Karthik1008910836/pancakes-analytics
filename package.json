@@ -8,7 +8,7 @@
     "backend:dev": "cd backend && npm run dev",
     "frontend:dev": "cd frontend && npm start",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "build": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "build": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build && echo 'Build completed successfully'",
     "start": "node index.js",
     "db:setup": "cd backend && npm run db:migrate",
     "test": "cd backend && npm test && cd ../frontend && npm test"
