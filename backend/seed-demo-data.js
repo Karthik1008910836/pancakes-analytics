@@ -5,8 +5,8 @@ async function seedDemoData() {
   try {
     console.log('🌱 Seeding demo data...');
 
-    // Create outlets
-    const outlets = await Outlet.bulkCreate([
+    // Create outlets (only if they don't exist)
+    const outletData = [
       {
         name: 'Kompally',
         address: 'Shop No. 15, Main Road, Kompally',
@@ -43,58 +43,82 @@ async function seedDemoData() {
         phone: '9876543213',
         manager_name: 'Sneha Reddy'
       }
-    ]);
+    ];
+
+    const outlets = [];
+    for (const outlet of outletData) {
+      const [createdOutlet] = await Outlet.findOrCreate({
+        where: { name: outlet.name },
+        defaults: outlet
+      });
+      outlets.push(createdOutlet);
+    }
 
     console.log('✅ Created outlets');
 
-    // Create users one by one to ensure password hashing
-    const adminUser = await User.create({
-      username: 'admin',
-      email: 'admin@99pancakes.com',
-      password_hash: 'admin123',
-      role: 'admin',
-      first_name: 'System',
-      last_name: 'Administrator'
+    // Create users (only if they don't exist)
+    const [adminUser] = await User.findOrCreate({
+      where: { username: 'admin' },
+      defaults: {
+        username: 'admin',
+        email: 'admin@99pancakes.com',
+        password_hash: 'admin123',
+        role: 'admin',
+        first_name: 'System',
+        last_name: 'Administrator'
+      }
     });
 
-    const kompally_user = await User.create({
-      username: 'kompallyuser',
-      email: 'kompally@99pancakes.com',
-      password_hash: 'password',
-      role: 'normal',
-      outlet_id: outlets[0].id,
-      first_name: 'Ravi',
-      last_name: 'Kumar'
+    const [kompally_user] = await User.findOrCreate({
+      where: { username: 'kompallyuser' },
+      defaults: {
+        username: 'kompallyuser',
+        email: 'kompally@99pancakes.com',
+        password_hash: 'password',
+        role: 'normal',
+        outlet_id: outlets[0].id,
+        first_name: 'Ravi',
+        last_name: 'Kumar'
+      }
     });
 
-    const madhapur_user = await User.create({
-      username: 'madhapuruser',
-      email: 'madhapur@99pancakes.com',
-      password_hash: 'password',
-      role: 'normal',
-      outlet_id: outlets[1].id,
-      first_name: 'Lakshmi',
-      last_name: 'Devi'
+    const [madhapur_user] = await User.findOrCreate({
+      where: { username: 'madhapuruser' },
+      defaults: {
+        username: 'madhapuruser',
+        email: 'madhapur@99pancakes.com',
+        password_hash: 'password',
+        role: 'normal',
+        outlet_id: outlets[1].id,
+        first_name: 'Lakshmi',
+        last_name: 'Devi'
+      }
     });
 
-    const jubilee_user = await User.create({
-      username: 'jubileeuser',
-      email: 'jubilee@99pancakes.com',
-      password_hash: 'password',
-      role: 'normal',
-      outlet_id: outlets[2].id,
-      first_name: 'Suresh',
-      last_name: 'Babu'
+    const [jubilee_user] = await User.findOrCreate({
+      where: { username: 'jubileeuser' },
+      defaults: {
+        username: 'jubileeuser',
+        email: 'jubilee@99pancakes.com',
+        password_hash: 'password',
+        role: 'normal',
+        outlet_id: outlets[2].id,
+        first_name: 'Suresh',
+        last_name: 'Babu'
+      }
     });
 
-    const banjara_user = await User.create({
-      username: 'banjarauser',
-      email: 'banjara@99pancakes.com',
-      password_hash: 'password',
-      role: 'normal',
-      outlet_id: outlets[3].id,
-      first_name: 'Kavitha',
-      last_name: 'Reddy'
+    const [banjara_user] = await User.findOrCreate({
+      where: { username: 'banjarauser' },
+      defaults: {
+        username: 'banjarauser',
+        email: 'banjara@99pancakes.com',
+        password_hash: 'password',
+        role: 'normal',
+        outlet_id: outlets[3].id,
+        first_name: 'Kavitha',
+        last_name: 'Reddy'
+      }
     });
 
     const users = [adminUser, kompally_user, madhapur_user, jubilee_user, banjara_user];
