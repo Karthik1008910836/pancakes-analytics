@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 require('dotenv').config();
 
 const { sequelize } = require('./src/models');
@@ -48,12 +49,36 @@ app.use('/api/outlets', outletsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/edit-requests', editRequestRoutes);
 
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'API endpoint not found'
+// Serve static files from React build
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  
+  // Catch all handler for React Router
+  app.get('*', (req, res) => {
+    // Don't serve index.html for API routes
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({
+        success: false,
+        message: 'API endpoint not found'
+      });
+    }
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
   });
-});
+} else {
+  // Development fallback for non-API routes
+  app.use('*', (req, res) => {
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({
+        success: false,
+        message: 'API endpoint not found'
+      });
+    }
+    res.status(404).json({
+      success: false,
+      message: 'Frontend not built. Run in development mode or build the frontend first.'
+    });
+  });
+}
 
 app.use((err, req, res, next) => {
   console.error('Error:', err);
