@@ -147,7 +147,17 @@ async function seedDemoData() {
       });
     }
 
-    await MonthlyTarget.bulkCreate(targets);
+    // Create targets with findOrCreate to prevent duplicates
+    for (const target of targets) {
+      await MonthlyTarget.findOrCreate({
+        where: {
+          outlet_id: target.outlet_id,
+          year: target.year,
+          month: target.month
+        },
+        defaults: target
+      });
+    }
     console.log('✅ Created monthly targets');
 
     // Create sample sales data for the last 10 days
@@ -200,7 +210,16 @@ async function seedDemoData() {
       }
     }
 
-    await DailySales.bulkCreate(salesData);
+    // Create sales data with findOrCreate to prevent duplicates
+    for (const sale of salesData) {
+      await DailySales.findOrCreate({
+        where: {
+          date: sale.date,
+          outlet_id: sale.outlet_id
+        },
+        defaults: sale
+      });
+    }
     console.log('✅ Created sample sales data');
 
     console.log('🎉 Demo data seeded successfully!');
